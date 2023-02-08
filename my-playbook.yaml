@@ -8,7 +8,7 @@
     - name: Install nginx server
       become: yes
       apt:
-        name: nginx
+        name: nginx=1.*
         state: present
     - name: Start nginx server
       service:
