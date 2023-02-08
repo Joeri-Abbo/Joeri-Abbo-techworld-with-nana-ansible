@@ -5,3 +5,15 @@ output "aws_public_ip_1" {
 output "aws_public_ip_2" {
   value = aws_instance.myapp-server-2.public_ip
 }
+
+output "aws_public_ip_3" {
+  value = aws_instance.myapp-server-3.public_ip
+}
+
+output "aws_public_ip_4" {
+  value = aws_instance.myapp-server-4.public_ip
+}
+
+output "aws_public_ip_5" {
+  value = aws_instance.myapp-server-5.public_ip
+}

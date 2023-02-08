@@ -1,7 +1,21 @@
-variable "avail_zone" {}
-variable "vpc_cider_block" {}
-variable "subnet_cider_block" {}
-variable "env_prefix" {}
-variable "my_ip" {}
-variable "instance_type" {}
-variable "public_key_location" {}
+variable "avail_zone" {
+  default = "eu-west-3b"
+}
+variable "vpc_cider_block" {
+  default = "10.0.0.0/16"
+}
+variable "subnet_cider_block" {
+  default = "10.0.100.0/24"
+}
+variable "env_prefix" {
+  default = "dev"
+}
+variable "my_ip" {
+  default = "0.0.0.0/0"
+}
+variable "instance_type" {
+  default = "t2.micro"
+}
+variable "public_key_location" {
+  default = "/Users/joeriabbo/.ssh/id_rsa.pub"
+}
