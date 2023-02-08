@@ -1,0 +1,53 @@
+---
+- name: Install python3
+  hosts: centos
+  become: yes
+  tasks:
+    - name: Install python3
+      vars:
+        ansible_python_interpreter: /usr/bin/python
+      become: yes
+      yum:
+        name: python3
+        update_cache: yes
+        state: present
+- name: Install Docker
+  hosts: centos
+  become: yes
+  tasks:
+    - name: Install Docker
+      become: yes
+      yum:
+        name: docker
+        update_cache: yes
+        state: present
+    - name: Start Docker
+      become: yes
+      service:
+        name: docker
+        state: started
+    - name: Add user to docker group
+      become: yes
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+    - name: Install docker-compose
+      become: yes
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/v2.2.2/docker-compose-linux-x86_64"
+        dest: /usr/local/bin/docker-compose
+- name: Start docker
+  hosts: centos
+  become: yes
+  tasks:
+    - name: Start docker
+      systemd:
+        name: docker
+        state: started
+- name: Test docker pull
+  hosts: centos
+  tasks:
+    - name: Test docker pull
+      become: yes
+      shell: docker pull nginx
