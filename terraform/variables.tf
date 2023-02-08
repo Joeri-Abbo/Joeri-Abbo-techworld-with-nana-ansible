@@ -14,7 +14,7 @@ variable "my_ip" {
   default = "0.0.0.0/0"
 }
 variable "instance_type" {
-  default = "t2.small"
+  default = "t2.large"
 }
 variable "public_key_location" {
   default = "/Users/joeriabbo/.ssh/id_rsa.pub"

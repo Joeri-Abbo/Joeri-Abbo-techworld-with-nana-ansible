@@ -19,30 +19,99 @@
 - name: Download and unpack Nexus installer
   hosts: webserver
   tasks:
+    - name: Check if nexus folder already exists
+      stat:
+        path: /opt/nexus
+      register: nexus_folder_exists
+      ignore_errors: yes
     - name: Download nexus
       become: yes
       get_url:
         url: https://download.sonatype.com/nexus/3/latest-unix.tar.gz
         dest: /opt/
       register: nexus_download_result
+      when: not nexus_folder_exists.stat.exists
     - name: Untar nexus installer
       become: yes
       unarchive:
         src: "{{ nexus_download_result.dest }}"
         dest: /opt/
         remote_src: yes
+      when: not nexus_folder_exists.stat.exists
     - name: Find nexus folder
       find:
         paths: /opt
         patterns: nexus-*
         file_type: directory
       register: nexus_folder
-    - name: Check if nexus folder already exists
-      stat:
-        path: /opt/nexus
-      register: nexus_folder_exists
-      ignore_errors: yes
+      when: not nexus_folder_exists.stat.exists
+
     - name: Rename nexus folder
       become: yes
       shell: "mv {{ nexus_folder.files[0].path }} /opt/nexus"
       when: not nexus_folder_exists.stat.exists
+- name: Create nexus user
+  hosts: webserver
+  tasks:
+    - name: Ensure group nexus exists
+      become: yes
+      group:
+        name: nexus
+        state: present
+    - name: Ensure user nexus exists
+      become: yes
+      user:
+        name: nexus
+        group: nexus
+        shell: /bin/bash
+        state: present
+    - name: Make nexus user owner of nexus folder
+      become: yes
+      file:
+        path: /opt/nexus
+        state: directory
+        owner: nexus
+        group: nexus
+        recurse: yes
+    - name: Make nexus user owner of sonatype-work folder
+      become: yes
+      file:
+        path: /opt/sonatype-work
+        state: directory
+        owner: nexus
+        group: nexus
+        recurse: yes
+- name: Start nexus with nexus user
+  hosts: webserver
+  become: yes
+  become_user: nexus
+  tasks:
+    - name: Set run_as_user to nexus
+      become: yes
+      blockinfile:
+        path: /opt/nexus/bin/nexus.rc
+        block: |
+          run_as_user="nexus"
+    #      lineinline:
+    #        path: /opt/nexus/bin/nexus.rc
+    #        line: run_as_user="nexus"
+    #        regexp: '^#run_as_user=""'
+    - name: Start nexus
+      command: /opt/nexus/bin/nexus run
+- name: Verify nexus is running
+  hosts: webserver
+  tasks:
+    - name: Ensure nexus app is running
+      become: yes
+      shell: ps aux | grep nexus
+      register: app_status
+    - debug:
+        msg: "{{ app_status.stdout_lines }}"
+    - name: Wait 1 minute for nexus to start
+      pause:
+        minutes: 1
+    - name: Check with netstat
+      shell: netstat -tulpn
+      register: netstat_result
+    - debug:
+        msg: "{{ netstat_result.stdout_lines }}"
