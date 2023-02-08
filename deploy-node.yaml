@@ -1,0 +1,25 @@
+---
+- name: Install node and npm
+  hosts: webserver
+  tasks:
+    - name: Update apt repo and cache
+      become: yes
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        force_apt_get: yes
+    - name: Install node and npm
+      become: yes
+      apt:
+        pkg:
+          - nodejs
+          - npm
+    - name: Copy nodejs folder to a server
+      copy:
+        src: my-app-0.1.0.tgz
+        dest: /home/ubuntu/app-0.1.0.tgz
+    - name: Unpack nodejs file
+      unarchive:
+        src: /home/ubuntu/app-0.1.0.tgz
+        dest: /home/ubuntu/
+        remote_src: yes
