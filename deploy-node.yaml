@@ -1,6 +1,11 @@
 ---
 - name: Install node and npm
   hosts: webserver
+  vars_files:
+    - project-vars
+  #  vars:
+  #    - version: 0.1.0
+  #    - destination: /home/ubuntu
   tasks:
     - name: Update apt repo and cache
       become: yes
@@ -22,34 +27,33 @@
         group: admin
         shell: /bin/bash
         state: present
+      register: user_creation_result
+    - debug:
+        msg: "{{ user_creation_result }}"
     - name: Copy nodejs folder to a server
       become: yes
-      become_user: nodejs
       copy:
-        src: my-app-0.1.0.tgz
-        dest: /home/nodejs/app-0.1.0.tgz
+        src: my-app-{{version}}.tgz
+        dest: "{{destination}}/app-{{version}}.tgz"
     - name: Unpack nodejs file
       become: yes
-      become_user: nodejs
       unarchive:
-        src: /home/ubuntu/app-0.1.0.tgz
-        dest: /home/nodejs/
+        src: "{{destination}}/app-{{version}}.tgz"
+        dest: "{{destination}}"
         remote_src: yes
     - name: Install nodejs dependencies
       become: yes
-      become_user: nodejs
       npm:
-        path: /home/nodejs/package
+        path: "{{destination}}/package"
         state: present
     - name: Start nodejs app
       command:
-        chdir: /home/nodejs/package/app
+        chdir: "{{ destination}}/package/app"
         cmd: node server
       async: 1000
       poll: 0
     - name: Ensure nodejs app is running
       become: yes
-      become_user: nodejs
       shell: ps aux | grep node | grep -v grep
       register: app_status
     - debug:
