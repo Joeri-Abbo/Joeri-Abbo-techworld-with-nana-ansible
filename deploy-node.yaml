@@ -23,3 +23,20 @@
         src: /home/ubuntu/app-0.1.0.tgz
         dest: /home/ubuntu/
         remote_src: yes
+    - name: Install nodejs dependencies
+      become: yes
+      npm:
+        path: /home/ubuntu/package
+        state: present
+    - name: Start nodejs app
+      command:
+        chdir: /home/ubuntu/package/app
+        cmd: node server
+      async: 1000
+      poll: 0
+    - name: Ensure nodejs app is running
+      become: yes
+      shell: ps aux | grep node | grep -v grep
+      register: app_status
+    - debug:
+        msg: "{{ app_status.stdout_lines }}"
