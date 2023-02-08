@@ -14,28 +14,42 @@
         pkg:
           - nodejs
           - npm
+    - name: Create new linux user for nodejs app
+      become: yes
+      user:
+        name: nodejs
+        comment: Nodejs user
+        group: admin
+        shell: /bin/bash
+        state: present
     - name: Copy nodejs folder to a server
+      become: yes
+      become_user: nodejs
       copy:
         src: my-app-0.1.0.tgz
-        dest: /home/ubuntu/app-0.1.0.tgz
+        dest: /home/nodejs/app-0.1.0.tgz
     - name: Unpack nodejs file
+      become: yes
+      become_user: nodejs
       unarchive:
         src: /home/ubuntu/app-0.1.0.tgz
-        dest: /home/ubuntu/
+        dest: /home/nodejs/
         remote_src: yes
     - name: Install nodejs dependencies
       become: yes
+      become_user: nodejs
       npm:
-        path: /home/ubuntu/package
+        path: /home/nodejs/package
         state: present
     - name: Start nodejs app
       command:
-        chdir: /home/ubuntu/package/app
+        chdir: /home/nodejs/package/app
         cmd: node server
       async: 1000
       poll: 0
     - name: Ensure nodejs app is running
       become: yes
+      become_user: nodejs
       shell: ps aux | grep node | grep -v grep
       register: app_status
     - debug:
