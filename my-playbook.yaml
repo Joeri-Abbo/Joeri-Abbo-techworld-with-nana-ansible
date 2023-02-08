@@ -1,0 +1,21 @@
+---
+- name: Configure nginx web server
+  hosts: webserver
+  tasks:
+    - name: upgrade all packages
+      become: yes
+      yum: name=* state=latest
+    - name: Install Htop
+      become: yes
+      yum:
+        name: htop
+        state: latest
+    - name: Install nginx
+      become: yes
+      shell:
+        "amazon-linux-extras install nginx1"
+    - name: Start nginx server
+      service:
+        name: nginx
+        state: started
+
