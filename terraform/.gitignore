@@ -1,0 +1,6 @@
+.terraform
+.idea
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.tfstate.lock.info
+server-key-pair.pem
