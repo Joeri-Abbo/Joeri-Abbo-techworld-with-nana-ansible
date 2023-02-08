@@ -19,3 +19,6 @@ variable "instance_type" {
 variable "public_key_location" {
   default = "/Users/joeriabbo/.ssh/id_rsa.pub"
 }
+variable "ami" {
+  default = "ami-0afd55c0c8a52973a"
+}

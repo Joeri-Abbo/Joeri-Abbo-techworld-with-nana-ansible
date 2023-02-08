@@ -2,20 +2,15 @@
 - name: Configure nginx web server
   hosts: webserver
   tasks:
-    - name: upgrade all packages
+    - name: Upgrade all apt packages
+      apt: upgrade=dist force_apt_get=yes
       become: yes
-      yum: name=* state=latest
-    - name: Install Htop
+    - name: Install nginx server
       become: yes
-      yum:
-        name: htop
-        state: latest
-    - name: Install nginx
-      become: yes
-      shell:
-        "amazon-linux-extras install nginx1"
+      apt:
+        name: nginx
+        state: present
     - name: Start nginx server
       service:
         name: nginx
         state: started
-
