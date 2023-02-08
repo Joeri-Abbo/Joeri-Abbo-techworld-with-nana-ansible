@@ -11,6 +11,11 @@
         name: python3
         update_cache: yes
         state: present
+    - name: Install docker python module
+      become: yes
+      pip:
+        name: docker
+        state: present
 - name: Install Docker
   hosts: centos
   become: yes
@@ -45,9 +50,17 @@
       systemd:
         name: docker
         state: started
-- name: Test docker pull
+#- name: Test docker pull
+#  hosts: centos
+#  tasks:
+#    - name: Test docker pull
+#      docker_image:
+#        name: nginx
+#        source: pull
+- name: Start docker containers
   hosts: centos
   tasks:
-    - name: Test docker pull
-      become: yes
-      shell: docker pull nginx
+    - name: Copy docker compose
+      copy:
+        src: /Users/joeriabbo/Sites/devops/techworld-with-nana/Joeri-Abbo-techworld-with-nana-ansible/files/docker-compose.yml
+        dest: /home/ec2-user/docker-compose.yml
