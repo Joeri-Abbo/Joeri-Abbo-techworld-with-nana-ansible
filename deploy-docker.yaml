@@ -40,7 +40,7 @@
     - name: Install docker-compose
       become: yes
       get_url:
-        url: "https://github.com/docker/compose/releases/download/v2.2.2/docker-compose-linux-x86_64"
+        url: https://github.com/docker/compose/releases/download/v2.2.2/docker-compose-linux-x86_64
         dest: /usr/local/bin/docker-compose
 - name: Start docker
   hosts: centos
@@ -50,17 +50,17 @@
       systemd:
         name: docker
         state: started
-#- name: Test docker pull
-#  hosts: centos
-#  tasks:
-#    - name: Test docker pull
-#      docker_image:
-#        name: nginx
-#        source: pull
 - name: Start docker containers
   hosts: centos
+  vars_prompt:
+    - name: docker_password
+      prompt: Enter password for docker registry
   tasks:
     - name: Copy docker compose
       copy:
         src: /Users/joeriabbo/Sites/devops/techworld-with-nana/Joeri-Abbo-techworld-with-nana-ansible/files/docker-compose.yml
         dest: /home/ec2-user/docker-compose.yml
+    - name: Docker login
+      docker_login:
+        username: joeriabbo
+        password: "{{ docker_password }}"
