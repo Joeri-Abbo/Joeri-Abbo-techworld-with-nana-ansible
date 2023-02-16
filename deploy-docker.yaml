@@ -2,6 +2,7 @@
 - name: Install python3
   hosts: centos
   become: yes
+  gather_facts: no
   tasks:
     - name: Install python3
       vars:
@@ -14,8 +15,9 @@
     - name: Install docker python module
       become: yes
       pip:
-        name: docker
-        state: present
+        name:
+          - docker
+          - docker-compose
 - name: Install Docker
   hosts: centos
   become: yes
@@ -52,9 +54,8 @@
         state: started
 - name: Start docker containers
   hosts: centos
-  vars_prompt:
-    - name: docker_password
-      prompt: Enter password for docker registry
+  vars_files:
+    - project-vars
   tasks:
     - name: Copy docker compose
       copy:
@@ -64,3 +65,7 @@
       docker_login:
         username: joeriabbo
         password: "{{ docker_password }}"
+    - name: Start docker containers from compose
+      docker_compose:
+        project_src: /home/ec2-user
+        state: present
