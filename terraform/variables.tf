@@ -22,3 +22,6 @@ variable "public_key_location" {
 variable "ami" {
   default = "ami-0afd55c0c8a52973a"
 }
+variable "ssh_key_private" {
+  default = "/Users/joeriabbo/.ssh/id_rsa.pub"
+}
