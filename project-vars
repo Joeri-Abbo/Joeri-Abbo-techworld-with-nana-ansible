@@ -1,3 +1,4 @@
 version: 0.1.0
 destination: /home/ubuntu
 docker_password: $DOCKER_PASSWORD
+user_groups: docker,adm
