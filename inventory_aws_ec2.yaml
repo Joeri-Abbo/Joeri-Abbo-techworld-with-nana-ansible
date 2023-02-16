@@ -2,3 +2,6 @@
 plugin: aws_ec2
 regions:
   - eu-west-3
+filters:
+  tag:Name: "dev*"
+  instance-state-name: running
