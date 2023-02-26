@@ -8,11 +8,8 @@
         api_version: v1
         kind: Namespace
         state: present
-        kubeconfig: /home/joeri/.kube/config
-
     - name: Deploy nginx app
       k8s:
         src: /home/joeri/Sites/devops/techworld-with-nana/Joeri-Abbo-techworld-with-nana-ansible/files/nginx-deployment.yaml
         state: present
-        kubeconfig: /home/joeri/.kube/config
         namespace: my-app
