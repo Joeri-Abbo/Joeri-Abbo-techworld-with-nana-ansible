@@ -1,0 +1,13 @@
+- name: Copy docker compose
+  copy:
+    src: docker-compose.yml
+    dest: /home/joeriabbo/docker-compose.yml
+- name: Docker login
+  docker_login:
+    registry_url: "{{ docker_registry }}"
+    username: "{{ docker_username }}"
+    password: "{{ docker_password }}"
+- name: Start docker containers from compose
+  docker_compose:
+    project_src: /home/joeriabbo
+    state: present

@@ -1,0 +1,43 @@
+version: '3'
+services:
+#  java-app:
+#    image: joeri-abbo/demo-app:latest
+#    environment:
+#      - DB_USER=user
+#      - DB_PWD=pass
+#      - DB_SERVER=mysql
+#      - DB_NAME=my-app-db
+  java-app:
+    image: openjdk:8-jdk-alpine
+    container_name: java-app
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./java-app:/usr/src/myapp
+      - /usr/src/myapp/maven-repo:/root/.m2
+    working_dir: /usr/src/myapp
+    command: mvn spring-boot:run
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: my-app-db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - ./mysql:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: wordpress
+      PMA_PASSWORD: wordpress
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql

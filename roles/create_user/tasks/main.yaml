@@ -1,0 +1,4 @@
+- name: Create linux user
+  user:
+    name: "{{ user_name }}"
+    groups: "{{ user_groups }}"
