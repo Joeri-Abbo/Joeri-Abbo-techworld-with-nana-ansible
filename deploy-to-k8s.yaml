@@ -13,3 +13,5 @@
       kubernetes.core.k8s:
         src: nginx-config.yaml
         state: present
+        kubeconfig: /root/.kube/config
+        namespace: my-app
