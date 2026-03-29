@@ -1,7 +1,7 @@
 resource "aws_vpc" "myapp-vpc" {
   cidr_block           = var.vpc_cider_block
   enable_dns_hostnames = true
-  tags                 = {
+  tags = {
     Name = "${var.env_prefix}-vpc"
   }
 }
@@ -10,14 +10,14 @@ resource "aws_subnet" "myapp-subnet-1" {
   vpc_id            = aws_vpc.myapp-vpc.id
   cidr_block        = var.subnet_cider_block
   availability_zone = var.avail_zone
-  tags              = {
+  tags = {
     Name = "${var.env_prefix}-subnet-1"
   }
 }
 
 resource "aws_internet_gateway" "myapp-igw" {
   vpc_id = aws_vpc.myapp-vpc.id
-  tags   = {
+  tags = {
     Name : "${var.env_prefix}-igw"
   }
 }
@@ -38,27 +38,27 @@ resource "aws_default_security_group" "default-sg" {
   vpc_id = aws_vpc.myapp-vpc.id
 
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
     cidr_blocks = [
       var.my_ip
     ]
   }
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
+    from_port = 8080
+    to_port   = 8080
+    protocol  = "tcp"
     cidr_blocks = [
       "0.0.0.0/0"
     ]
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
     cidr_blocks = [
       "0.0.0.0/0"
     ]

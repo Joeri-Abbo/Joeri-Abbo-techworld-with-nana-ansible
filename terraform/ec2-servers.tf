@@ -2,7 +2,7 @@ resource "aws_instance" "myapp-server-1" {
   ami           = data.aws_ami.latest-amazon-linux-image.id
   instance_type = var.instance_type
 
-  subnet_id              = aws_subnet.myapp-subnet-1.id
+  subnet_id = aws_subnet.myapp-subnet-1.id
   vpc_security_group_ids = [
     aws_default_security_group.default-sg.id
   ]
@@ -20,7 +20,7 @@ resource "aws_instance" "myapp-server-2" {
   ami           = data.aws_ami.latest-amazon-linux-image.id
   instance_type = var.instance_type
 
-  subnet_id              = aws_subnet.myapp-subnet-1.id
+  subnet_id = aws_subnet.myapp-subnet-1.id
   vpc_security_group_ids = [
     aws_default_security_group.default-sg.id
   ]
@@ -39,7 +39,7 @@ resource "aws_instance" "myapp-server-3" {
   ami           = data.aws_ami.latest-amazon-linux-image.id
   instance_type = var.instance_type
 
-  subnet_id              = aws_subnet.myapp-subnet-1.id
+  subnet_id = aws_subnet.myapp-subnet-1.id
   vpc_security_group_ids = [
     aws_default_security_group.default-sg.id
   ]
@@ -57,7 +57,7 @@ resource "aws_instance" "myapp-server-4" {
   ami           = data.aws_ami.latest-amazon-linux-image.id
   instance_type = var.instance_type
 
-  subnet_id              = aws_subnet.myapp-subnet-1.id
+  subnet_id = aws_subnet.myapp-subnet-1.id
   vpc_security_group_ids = [
     aws_default_security_group.default-sg.id
   ]

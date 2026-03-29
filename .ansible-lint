@@ -1,0 +1,18 @@
+---
+# Profile: min, basic, moderate, safety, shared, production
+profile: min
+
+# Skip rules that are stylistic or require collection-specific context
+skip_list:
+  - fqcn  # tutorial repo uses short module names
+  - yaml[truthy]  # boolean format variations
+  - no-changed-when  # shell tasks without changed_when
+  - risky-file-permissions  # tutorial playbooks don't set explicit perms
+  - risky-shell-pipe  # tutorial use of shell pipes
+  - command-instead-of-shell  # tutorial style
+  - no-free-form  # tutorial style
+
+# Warn on these rather than fail
+warn_list:
+  - name  # task naming suggestions
+
